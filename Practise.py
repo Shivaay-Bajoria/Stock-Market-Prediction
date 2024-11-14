@@ -1,5 +1,5 @@
-import streamlit as st
-from datetime import date
+import streamlit as st #Creating the data visualization tool
+from datetime import date 
 import numpy as np
 import yfinance as yf
 from prophet import Prophet
@@ -9,7 +9,7 @@ import pandas as pd
 
 
 #Creating the start date
-START = "2015-01-01"
+START = "2010-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 
 #Starting the web app
@@ -21,7 +21,6 @@ stocks = ("AAPL", "GOOG", "MSFT", "GME", "NVDA", "INTC", "TSLA", "DELL", "AMZN",
 #Selecting which stock we want to predict
 selected_stock = st.selectbox("Select DataSet for Predicition", stocks)
 
-#df = pd.read_csv('C:/Users/shiva/Downloads/archive/SBIN.csv')
 
 #Selecting the years of predicition
 n_years = st.slider("Years of Predicition: ", 1, 4)
@@ -30,17 +29,24 @@ period = n_years * 365
 #To cache the downloaded data
 #@st.cache_data
 #Function to Load Data
-def load_data():
-    data = yf.download("AAPL", START, TODAY)
+def load_data(ticker):
+    data = yf.download(ticker, START, TODAY)
     data.reset_index(inplace=True)
     return data 
 
 data_load_state = st.text("Load Data ...")
-data = load_data()
+data = load_data(selected_stock)
 data_load_state.text("Loading data.... Done!!")
 
-#data = pd.read_csv('C:/Users/shiva/Downloads/archive/TATASTEEL.csv')
-#data.reset_index(inplace=True)
+
+st.code("data.isnull().sum()")
+st.code(data.isnull().sum())
+
+st.code("data.isnull().sum() / len(data)")
+st.code(data.isnull().sum() / len(data))
+
+st.code("data.describe")
+st.code(data.describe)
 
 #Analyis the raw data
 st.subheader("Raw Data")
